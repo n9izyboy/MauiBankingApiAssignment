@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiBankingExercise.Views.TransactionScreen">
+    <ScrollView>
+    <StackLayout Padding="16" Spacing="20">
+
+        
+        <StackLayout Padding="20" BackgroundColor="#6B8E23" Spacing="8">
+            <Label Text="Account Overview" 
+                   FontSize="18" 
+                   FontAttributes="Bold" 
+                   TextColor="White" />
+            <Label Text="{Binding Account.AccountNumber, StringFormat='Account: {0}'}" 
+                   FontSize="14" 
+                   TextColor="White" />
+            <Label Text="{Binding Account.AccountBalance, StringFormat='{0:C}'}" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="White" />
+        </StackLayout>
+
+        
+        <StackLayout Padding="20" BackgroundColor="White" Spacing="16">
+            <Label Text="New Transaction" 
+                   FontSize="18" 
+                   FontAttributes="Bold" 
+                   TextColor="#556B2F" />
+
+            
+            <StackLayout Spacing="4">
+                <Label Text="Type" 
+                       FontSize="14" 
+                       TextColor="#556B2F" />
+                <Picker ItemsSource="{Binding TransactionTypes}" 
+                        SelectedItem="{Binding SelectedTransactionType}"
+                        BackgroundColor="#F5F5F5"
+                        TextColor="#556B2F" />
+            </StackLayout>
+
+            
+            <StackLayout Spacing="4">
+                <Label Text="Amount" 
+                       FontSize="14" 
+                       TextColor="#556B2F" />
+                <Entry Text="{Binding TransactionAmount}" 
+                       Keyboard="Numeric" 
+                       Placeholder="Enter amount"
+                       BackgroundColor="#F5F5F5"
+                       TextColor="#556B2F"
+                       PlaceholderColor="#808080" />
+            </StackLayout>
+
+            
+            <Button Text="Process Transaction" 
+                    Command="{Binding SubmitTransactionCommand}" 
+                    BackgroundColor="#8FBC8F" 
+                    TextColor="White"
+                    FontSize="16" />
+        </StackLayout>
+
+        
+        <StackLayout Spacing="12">
+            <Label Text="Recent Transactions" 
+                   FontSize="18" 
+                   FontAttributes="Bold" 
+                   TextColor="#556B2F"
+                   Margin="4,0" />
+
+            <CollectionView ItemsSource="{Binding Transactions}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="16" BackgroundColor="White" RowSpacing="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            
+                            <Label Grid.Column="0" 
+                                   FontSize="16" 
+                                   VerticalTextAlignment="Center">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" 
+                                               Binding="{Binding TransactionType.Name}" 
+                                               Value="Deposit">
+                                        <Setter Property="Text" Value="↗" />
+                                        <Setter Property="TextColor" Value="#6B8E23" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" 
+                                               Binding="{Binding TransactionType.Name}" 
+                                               Value="Withdrawal">
+                                        <Setter Property="Text" Value="↙" />
+                                        <Setter Property="TextColor" Value="#808080" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                            
+                            <StackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding TransactionType.Name}" 
+                                       FontSize="14" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#556B2F" />
+                                <Label Text="{Binding TransactionDate, StringFormat='{0:MMM dd, yyyy}'}" 
+                                       FontSize="12" 
+                                       TextColor="#808080" />
+                            </StackLayout>
+
+                            
+                            <Label Grid.Column="2" 
+                                   Text="{Binding Amount, StringFormat='{0:C}'}" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   VerticalTextAlignment="Center">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" 
+                                               Binding="{Binding TransactionType.Name}" 
+                                               Value="Deposit">
+                                        <Setter Property="TextColor" Value="#6B8E23" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" 
+                                               Binding="{Binding TransactionType.Name}" 
+                                               Value="Withdrawal">
+                                        <Setter Property="TextColor" Value="#808080" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+
+        
+        <ActivityIndicator IsVisible="{Binding IsLoading}" 
+                          IsRunning="{Binding IsLoading}"
+                          Color="#6B8E23" />
+    </StackLayout>
+    </ScrollView>
+</ContentPage>

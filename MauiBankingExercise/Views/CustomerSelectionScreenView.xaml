@@ -1,0 +1,93 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiBankingExercise.Views.CustomerSelectionScreenView"
+             Title="Select a Customer">
+
+    <ScrollView>
+        
+        <StackLayout Padding="20" Spacing="25">
+            
+            <Border StrokeThickness="0" 
+                  BackgroundColor="#27AE60"
+                  StrokeShape="RoundRectangle 15">
+                <Grid Padding="25">
+                    <StackLayout Spacing="12">
+                        <Label Text="Hello There!" 
+                             FontSize="24" 
+                             FontAttributes="Bold" 
+                             TextColor="White" />
+                        <Label Text="{Binding Customer.FirstName}" 
+                             FontSize="20" 
+                             FontAttributes="Bold"
+                             TextColor="White" />
+                        <Label Text="{Binding Customer.Email}" 
+                             FontSize="16" 
+                             TextColor="#D5F4E6" />
+                    </StackLayout>
+                </Grid>
+            </Border>
+
+            
+            <StackLayout Orientation="Horizontal" 
+                       Spacing="10">
+                <Label Text="Users" 
+                     FontSize="22" 
+                     FontAttributes="Bold" 
+                     TextColor="#2C3E50"
+                     VerticalTextAlignment="Center" />
+            </StackLayout>
+
+           
+            <CollectionView ItemsSource="{Binding Accounts}"
+                          ItemsLayout="VerticalList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="5,8">
+                            <Border StrokeThickness="1" 
+                                  Stroke="#E8E8E8"
+                                  BackgroundColor="White"
+                                  StrokeShape="RoundRectangle 15">
+                                <Grid Padding="20">
+                                    <StackLayout Spacing="15">
+                                        
+                                        <StackLayout Spacing="8">
+                                            <Label Text="{Binding AccountNumber, StringFormat='Account {0}'}" 
+                                                 FontSize="18" 
+                                                 FontAttributes="Bold" 
+                                                 TextColor="#2C3E50" />
+                                            <Label Text="{Binding AccountBalance, StringFormat='{0:C}'}" 
+                                                 FontSize="32" 
+                                                 FontAttributes="Bold" 
+                                                 TextColor="#27AE60" />
+                                            <Label Text="{Binding DateOpened, StringFormat='Opened: {0:MMM dd, yyyy}'}" 
+                                                 FontSize="14" 
+                                                 TextColor="#7F8C8D" />
+                                        </StackLayout>
+
+                                        
+                                        <Button Text="View Transactions" 
+                                              Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectAccountCommand}"
+                                              CommandParameter="{Binding}"
+                                              BackgroundColor="#3498DB" 
+                                              TextColor="White"
+                                              FontSize="16"
+                                              FontAttributes="Bold"
+                                              CornerRadius="10"
+                                              HeightRequest="45" />
+                                    </StackLayout>
+                                </Grid>
+                            </Border>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+           
+            <ActivityIndicator IsVisible="{Binding IsLoading}" 
+                             IsRunning="{Binding IsLoading}"
+                             Color="#3498DB"
+                             WidthRequest="40"
+                             HeightRequest="40" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

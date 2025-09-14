@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiBankingExercise.Views.CustomerDashBoard"
+             Title="Customer Dash Board">
+    <Grid>
+        <ScrollView>
+            <StackLayout Padding="16" Spacing="16">
+
+
+                <StackLayout Padding="20" BackgroundColor="#6B8E23" Spacing="8">
+                    <Label Text="Bank" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="White"
+                       HorizontalTextAlignment="Center" />
+                    <Label Text="Select Account" 
+                       FontSize="14" 
+                       TextColor="White"
+                       HorizontalTextAlignment="Center" />
+                </StackLayout>
+
+                
+                <CollectionView ItemsSource="{Binding Customers}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="16" BackgroundColor="White">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCustomerCommand}"
+                                                     CommandParameter="{Binding}" />
+                                </Grid.GestureRecognizers>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+
+                               
+                                <Label Grid.Column="0" 
+                                   Text="●" 
+                                   FontSize="20" 
+                                   TextColor="#8FBC8F"
+                                   VerticalTextAlignment="Center" />
+
+                               
+                                <StackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="{Binding FullName}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#556B2F" />
+                                    <Label Text="{Binding Email}" 
+                                       FontSize="12" 
+                                       TextColor="#808080" />
+                                </StackLayout>
+
+                                
+                                <Label Grid.Column="2" 
+                                   Text="›" 
+                                   FontSize="18" 
+                                   TextColor="#9ACD32"
+                                   VerticalTextAlignment="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                
+                <StackLayout Padding="20" IsVisible="{Binding HasNoCustomers}">
+                    <Label Text="No customers found" 
+                       FontSize="16" 
+                       TextColor="#808080"
+                       HorizontalTextAlignment="Center" />
+                </StackLayout>
+
+            </StackLayout>
+        </ScrollView>
+
+       
+        <Grid IsVisible="{Binding IsLoading}" BackgroundColor="#80000000">
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <ActivityIndicator IsRunning="{Binding IsLoading}" Color="#6B8E23" />
+                <Label Text="Loading..." TextColor="#6B8E23" FontSize="14" />
+            </StackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>
