@@ -1,5 +1,7 @@
-﻿using MauiBankingExercise.Models;
+﻿using Android.Provider;
+using MauiBankingExercise.Models;
 using Microsoft.Win32.SafeHandles;
+using Org.Apache.Http.Impl.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,8 +16,20 @@ namespace MauiBankingExercise.Services
     public class BankingDataBaseServices
     {
 
+        private readonly HttpClient _httpClient;
 
+        public DatabaseService(HttpClient httpClient)
+        {
+            var handler = new HttpClientHandler()
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
 
+            };
+            _httpClient = new HttpClient(handler);
+            _httpClient.BaseAddress = new Uri("https://localhost:7280/");
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+            _httpClient.DefaultRequestHeaders.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
         private static BankingDataBaseServices _instance;
 
         public static BankingDataBaseServices GetInstance()
@@ -38,15 +52,7 @@ namespace MauiBankingExercise.Services
 
         }
 
-        private SQLite.SQLiteConnection _dbconnection;
-        public string GetDatabasePath()
-        {
-
-            string dbName = "BankingDatabase.db";
-            string pathToDb = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string filename = Path.Combine(pathToDb, dbName);
-            return Path.Combine(pathToDb, filename);
-        }
+        
 
         private void ExtractDatabaseConnection()
         {
@@ -77,28 +83,10 @@ namespace MauiBankingExercise.Services
            throw new NotImplementedException();
         }
 
-        public BankingDataBaseServices(SQLite.SQLiteConnection dbconnection)
-        {
-            if (!File.Exists(GetDatabasePath()))
-            {
-                ExtractDatabaseConnection();
-            }
-            _dbconnection = dbconnection;
-            ExtractDatabaseConnection();
-        }
+      
 
 
-        public List<Bank> GetAllBanksFromDatabase()
-        {
-            // Ensure the database connection is established
-            if (_dbconnection == null)
-            {
-                _dbconnection = new SQLite.SQLiteConnection(GetDatabasePath());
-                ExtractDatabaseConnection();
-            }
-            // Query the database for all banks
-            return _dbconnection.Table<Bank>().ToList();
-        }
+       
     }
 }
     

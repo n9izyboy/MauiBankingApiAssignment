@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using MauiBankingExercise.Services;
+using MauiBankingExercise.Configurations;
 
 namespace MauiBankingExercise.ViewModels
 {
@@ -23,6 +25,14 @@ namespace MauiBankingExercise.ViewModels
         public virtual void OnAppearing()
         {
 
+        }
+
+        
+        public async Task ExampleMethod()
+        {
+            var settings = new ApplicationSettings();
+            var apiService = new BankingApiService(settings);
+            var accounts = await apiService.GetAccountsByCustomerIdAsync(1); 
         }
     }
 }
