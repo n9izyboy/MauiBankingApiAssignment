@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MauiBankingExercise.Models;
-using SQLite;
 using MauiBankingExercise.ViewModels;
 using System.Collections.ObjectModel;
 

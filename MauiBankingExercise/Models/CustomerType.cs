@@ -1,19 +1,20 @@
-﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MauiBankingExercise.Models
 {
-
-
     public class CustomerType
     {
-        [PrimaryKey, AutoIncrement]
+        
         public int CustomerTypeId { get; set; }
-
         public string Name { get; set; }
 
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
-        public List<Customer> Customers { get; set; }
+
+        public ICollection<Customer> Customers { get; set; }
     }
+
 }
+

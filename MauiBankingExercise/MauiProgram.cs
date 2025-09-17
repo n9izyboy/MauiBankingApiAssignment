@@ -5,6 +5,7 @@ using MauiBankingExercise.ViewModels;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
+using MauiBankingExercise.Interface;
 
 
 namespace MauiBankingExercise
@@ -30,14 +31,16 @@ namespace MauiBankingExercise
             builder.Logging.AddDebug();
 
 
-            builder.Services.AddHttpClient;
-            
+            builder.Services.AddSingleton<MauiBankingExercise.Configurations.ApplicationSettings>();
 
-            builder.Services.AddSingleton<MauiBankingExercise.Services.BankingSeeder>();
-            
+
+            builder.Services.AddSingleton<MauiBankingExercise.Interface.IBankingService, BankingApiService>();
+            builder.Services.AddTransient<MauiBankingExercise.ViewModels.CustomerSelectionScreenViewModel>();
+
+
             builder.Services.AddTransient<MauiBankingExercise.Views.CustomerSelectionScreenView>();
             builder.Services.AddSingleton<MauiBankingExercise.Views.AccountDetails>();
-            builder.Services.AddTransient<MauiBankingExercise.ViewModels.CustomerSelectionScreenViewModel>();
+           
             builder.Services.AddSingleton<MauiBankingExercise.Views.CustomerDashBoard>();
             builder.Services.AddSingleton<MauiBankingExercise.ViewModels.CustomerDashBoardViewModel>();
             builder.Services.AddSingleton<MauiBankingExercise.Views.TransactionScreen>();

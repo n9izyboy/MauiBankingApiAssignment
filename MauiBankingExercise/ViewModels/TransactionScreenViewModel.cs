@@ -12,6 +12,7 @@ using MauiBankingExercise.Services;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Internals;
 
+
 namespace MauiBankingExercise.ViewModels
 {
     public class TransactionScreenViewModel
@@ -20,7 +21,7 @@ namespace MauiBankingExercise.ViewModels
 
         public class TransactionViewModel : INotifyPropertyChanged, IQueryAttributable
         {
-            private readonly  BankingSeeder _bankingSeeder;
+            private readonly BankingApiService _bankingApiService;
             private bool _isLoading;
             private Account _account;
             private ObservableCollection<Transaction> _transactions;
@@ -28,9 +29,9 @@ namespace MauiBankingExercise.ViewModels
             private TransactionType _selectedTransactionType;
             private List<TransactionType> _transactionTypes;
 
-            public TransactionViewModel(BankingSeeder _bankingSeeder, BankingSeeder bankingSeeder)
+            public TransactionViewModel(BankingApiService _bankingApiService, BankingApiService bankingApiService)
             {
-                _bankingSeeder = bankingSeeder;
+                _bankingApiService = bankingApiService;
                 _transactions = new ObservableCollection<Transaction>();
                 _transactionTypes = new List<TransactionType>
         {
@@ -93,8 +94,8 @@ namespace MauiBankingExercise.ViewModels
                 IsLoading = true;
                 try
                 {
-                    Account = await _bankingSeeder.GetAccountAsync(customerId);
-                    var transactions = await _bankingSeeder.GetTransactionsAsync(customerId);
+                    Account = await _bankingApiService.GetAccountAsync(customerId);
+                    var transactions = await _bankingApiService.GetTransactionsAsync(customerId);
 
                     Transactions.Clear();
                     foreach (var transaction in transactions)
@@ -129,7 +130,7 @@ namespace MauiBankingExercise.ViewModels
                 IsLoading = true;
                 try
                 {
-                    await _bankingSeeder.ProcessTransactionAsync(Account.CustomerId, SelectedTransactionType.Name, amount);
+                    await _bankingApiService.ProcessTransactionAsync(Account.CustomerId, SelectedTransactionType.Name, amount);
 
                     // Refresh account data
                     await LoadAccountDataAsync(Account.CustomerId);

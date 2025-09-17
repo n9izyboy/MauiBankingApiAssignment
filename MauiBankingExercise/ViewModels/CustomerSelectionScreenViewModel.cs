@@ -2,7 +2,6 @@
 using MauiBankingExercise.Services;
 using MauiBankingExercise.ViewModels;
 using System;
-using SQLite;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,20 +10,22 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Maui.Controls;
+using MauiBankingExercise.Interface;
+
 
 
 namespace MauiBankingExercise.ViewModels
 {
-    
     public partial class CustomerSelectionScreenViewModel : BaseViewModel
     {
-        private readonly BankingSeeder bankingSeeder;
-        private Customer _customer;
+        private readonly IBankingService _bankingApiService;
         private bool _isLoading;
+        private ObservableCollection<Customer> _customers;
 
-        public CustomerSelectionScreenViewModel(BankingSeeder _bankingSeeder)
+        public CustomerSelectionScreenViewModel(IBankingService bankingApiService)
         {
-            _bankingSeeder = _bankingSeeder;
+            _bankingApiService = bankingApiService ?? throw new ArgumentNullException(nameof(bankingApiService));
             _customers = new ObservableCollection<Customer>();
             SelectCustomerCommand = new Command<Customer>(OnSelectCustomer);
         }
@@ -32,45 +33,15 @@ namespace MauiBankingExercise.ViewModels
         public ObservableCollection<Customer> Customers
         {
             get => _customers;
-            set
-            {
-                if (_customers != value)
-                {
-                    _customers = value;
-                    OnPropertyChanged();
-                }
-            }
-
-        }
-
-
-        private void SetProperty(ref ObservableCollection<Customer> customers, ObservableCollection<Customer> value)
-        {
-            throw new NotImplementedException();
+            set => SetProperty(ref _customers, value);
         }
 
         public bool IsLoading
         {
             get => _isLoading;
-            set
-            {
-                if (_isLoading != value)
-                {
-                    _isLoading = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref _isLoading, value);
         }
 
-        private void SetProperty(ref bool isLoading, bool value)
-        {
-            throw new NotImplementedException();
-        }
-
-        private BankingSeeder _bankingSeeder;
-        private ObservableCollection<Customer> _customers;
-
-        public BankingSeeder BankingSeeder { get; }
         public ICommand SelectCustomerCommand { get; }
 
         public async Task LoadCustomersAsync()
@@ -78,22 +49,24 @@ namespace MauiBankingExercise.ViewModels
             IsLoading = true;
             try
             {
-                var customers = await _bankingSeeder.GetCustomersAsync();
-                Customers.Clear();
-                foreach (var customer in customers)
-                {
+                System.Diagnostics.Debug.WriteLine("Loading customers...");
+                var customers = await _bankingApiService.GetAllCustomersAsync();
+                System.Diagnostics.Debug.WriteLine($"Loaded {customers?.Count ?? 0} customers");
 
-                    if (customer is Customer cust)
+                Customers.Clear();
+                if (customers != null)
+                {
+                    foreach (var customer in customers)
                     {
-                        Customers.Add(cust);
+                        Customers.Add((Customer)customer);
+                        System.Diagnostics.Debug.WriteLine($"Added customer: {customer}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Handle error
                 System.Diagnostics.Debug.WriteLine($"Error loading customers: {ex.Message}");
-                Console.WriteLine($"Error loading customers: {ex.Message}");
+                // You might want to show an alert to the user
             }
             finally
             {
@@ -108,40 +81,28 @@ namespace MauiBankingExercise.ViewModels
                 await Shell.Current.GoToAsync($"CustomerDashboard?customerId={customer.CustomerId}");
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+       
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action? onChanged = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
         }
-
-        public async Task<IEnumerable<object>> GetCustomersAsync()
-        {
-            using (var db = new SQLiteConnection("DatabaseSeederService"))
-            {
-                return db.Table<Customer>().ToList();
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    } 
+    }
 }
-     
 
-    
+
+
+
+
+
+
+
+
+
+
 

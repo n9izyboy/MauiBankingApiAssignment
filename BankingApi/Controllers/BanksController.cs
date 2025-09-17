@@ -2,6 +2,8 @@ using BankingApi.Data;
 using BankingApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace BankingApi.Controllers
 {
@@ -33,6 +35,8 @@ namespace BankingApi.Controllers
                 return NotFound();
 
             return Ok(bank);
+
+         
         }
     }
 }

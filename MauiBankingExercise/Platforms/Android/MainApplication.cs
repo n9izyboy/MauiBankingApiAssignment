@@ -11,6 +11,6 @@ namespace MauiBankingExercise
         {
         }
 
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        protected override MauiApp CreateMauiApp() => (MauiApp)MauiProgram.CreateMauiApp();
     }
 }
