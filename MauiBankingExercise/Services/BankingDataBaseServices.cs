@@ -23,7 +23,7 @@ namespace MauiBankingExercise.Services
 
             public DatabaseService(HttpClient httpClient)
             {
-                // Create HttpClient with custom handler for localhost SSL issues
+                
                 var handler = new HttpClientHandler()
                 {
                     ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
@@ -161,7 +161,7 @@ namespace MauiBankingExercise.Services
                 {
                     System.Diagnostics.Debug.WriteLine($"Starting transaction for account {accountId}");
 
-                    // Map transaction type
+                   
                     int transactionTypeId = transactionType.ToLower() switch
                     {
                         "deposit" => 1,
@@ -169,7 +169,7 @@ namespace MauiBankingExercise.Services
                         _ => 1
                     };
 
-                    // Get the complete account details first
+                    
                     var accountResponse = await _httpClient.GetAsync($"Accounts/{accountId}");
                     if (!accountResponse.IsSuccessStatusCode)
                     {
@@ -181,7 +181,7 @@ namespace MauiBankingExercise.Services
                     var accountData = JsonSerializer.Deserialize<JsonElement>(accountJson, GetJsonOptions());
                     System.Diagnostics.Debug.WriteLine($"Account data: {accountJson}");
 
-                    // Get customer details
+                    
                     var customerId = accountData.GetProperty("customerId").GetInt32();
                     var customerResponse = await _httpClient.GetAsync($"Customers/{customerId}");
                     if (!customerResponse.IsSuccessStatusCode)
@@ -194,7 +194,7 @@ namespace MauiBankingExercise.Services
                     var customerData = JsonSerializer.Deserialize<JsonElement>(customerJson, GetJsonOptions());
                     System.Diagnostics.Debug.WriteLine($"Customer data: {customerJson}");
 
-                    // Create the complete request with ALL required fields
+                    
                     var completeRequest = new
                     {
                         AccountId = accountId,

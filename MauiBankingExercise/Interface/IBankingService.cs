@@ -35,6 +35,13 @@ namespace MauiBankingExercise.Interface
         Task<Transaction> GetTransactionByIdAsync(int transactionId);
         Task<Transaction> UpdateTransactionByIdAsync(int transactionId, Transaction updatedTransaction);
 
+        void LoadData();
+
+        void SaveData();
+
+
+        
+
 
 
     }

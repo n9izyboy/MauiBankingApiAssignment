@@ -145,4 +145,14 @@ public class BankingApiService : IBankingService
     {
         throw new NotImplementedException();
     }
+
+    public void LoadData()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SaveData()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -9,8 +9,7 @@ using MauiBankingExercise.Views;
 
             Routing.RegisterRoute("customers", typeof(CustomerSelectionScreenView));
             Routing.RegisterRoute("transaction", typeof(TransactionScreen));
-            Routing.RegisterRoute("accountDetails", typeof(AccountDetails));
             Routing.RegisterRoute("customerDashBoard", typeof(CustomerDashBoard));
-    }
+        }
     }
 

@@ -66,7 +66,7 @@ namespace MauiBankingExercise.ViewModels
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error loading customers: {ex.Message}");
-                // You might want to show an alert to the user
+                
             }
             finally
             {

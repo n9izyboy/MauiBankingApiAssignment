@@ -30,19 +30,22 @@ namespace MauiBankingExercise
 #if DEBUG
             builder.Logging.AddDebug();
 
+            builder.Services.AddHttpClient();
+
 
             builder.Services.AddSingleton<MauiBankingExercise.Configurations.ApplicationSettings>();
 
 
             builder.Services.AddSingleton<MauiBankingExercise.Interface.IBankingService, BankingApiService>();
+
+
             builder.Services.AddTransient<MauiBankingExercise.ViewModels.CustomerSelectionScreenViewModel>();
-
-
             builder.Services.AddTransient<MauiBankingExercise.Views.CustomerSelectionScreenView>();
-            builder.Services.AddSingleton<MauiBankingExercise.Views.AccountDetails>();
+            
            
             builder.Services.AddSingleton<MauiBankingExercise.Views.CustomerDashBoard>();
             builder.Services.AddSingleton<MauiBankingExercise.ViewModels.CustomerDashBoardViewModel>();
+            builder.Services.AddSingleton<MauiBankingExercise.ViewModels.TransactionScreenViewModel>();
             builder.Services.AddSingleton<MauiBankingExercise.Views.TransactionScreen>();
 
 
